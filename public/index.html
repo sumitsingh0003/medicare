@@ -1,43 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <title>Medicare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/menu.css" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link rel="stylesheet" href="./assets/css/responsive.css" />
+</head>
+<body>
+  <div id="root"></div> 
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  <!-- Script start -->
+   <!-- Using CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+  <!-- <script src="./assets/js/jquery.min.js" defer></script> -->
+  <!-- <script src="./assets/js/menu.js" defer></script> -->
+  <script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+      (function($) {
+        "use strict";
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+        if ($.fn.navigation) {
+          $("#navigation1").navigation();
+          $("#always-hidden-nav").navigation({
+            hidden: true
+          });
+        }
+
+        $(window).on("load", function() {
+          $("#preloader").fadeOut("slow", function() {
+            $(this).remove();
+          });
+        });
+      })(jQuery);
+
+      (function($, window, document) {
+        $.navigation = function(element, options) {
+          var defaults = {
+            responsive: true,
+            mobileBreakpoint: 991,
+            showDuration: 200,
+            hideDuration: 200,
+            showDelayDuration: 0,
+            hideDelayDuration: 0,
+            submenuTrigger: "hover",
+            effect: "fadeIn",
+            submenuIndicator: true,
+            submenuIndicatorTrigger: false,
+            hideSubWhenGoOut: true,
+            visibleSubmenusOnMobile: false,
+            fixed: false,
+            overlay: true,
+            overlayColor: "rgba(0, 0, 0, 0.5)",
+            hidden: false,
+            hiddenOnMobile: false,
+            offCanvasSide: "left",
+            offCanvasCloseButton: true,
+            animationOnShow: "",
+            animationOnHide: "",
+            onInit: function() {},
+            onLandscape: function() {},
+            onPortrait: function() {},
+            onShowOffCanvas: function() {},
+            onHideOffCanvas: function() {}
+          };
+
+          var plugin = this;
+          var settings = {};
+          var $element = $(element);
+
+          plugin.init = function() {
+            settings = $.extend({}, defaults, options);
+            settings.offCanvasCloseButton && $element.find(".nav-menus-wrapper").prepend("<span class='nav-menus-wrapper-close-button'>&#10005;</span>");
+            "right" === settings.offCanvasSide && $element.find(".nav-menus-wrapper").addClass("nav-menus-wrapper-right");
+            settings.hidden && ($element.addClass("navigation-hidden"), (settings.mobileBreakpoint = 99999));
+            setupSubmenus();
+            settings.fixed && $element.addClass("navigation-fixed");
+            $element.find(".nav-toggle").on("click touchstart", function(event) {
+              event.stopPropagation();
+              event.preventDefault();
+              plugin.showOffcanvas();
+              options !== undefined && plugin.callback("onShowOffCanvas");
+            });
+            $element.find(".nav-menus-wrapper-close-button").on("click touchstart", function() {
+              plugin.hideOffcanvas();
+              options !== undefined && plugin.callback("onHideOffCanvas");
+            });
+            $element.find(".nav-search-button, .nav-search-close-button").on("click touchstart keydown", function(event) {
+              event.stopPropagation();
+              event.preventDefault();
+              var key = event.keyCode || event.which;
+              "click" === event.type || "touchstart" === event.type || ("keydown" === event.type && 13 == key) ? plugin.toggleSearch() : 9 == key && $(event.target).blur();
+            });
+            $(window).resize(function() {
+              plugin.initNavigationMode(getWidth());
+              hideOnMobile();
+            });
+            plugin.initNavigationMode(getWidth());
+            settings.hiddenOnMobile && hideOnMobile();
+            options !== undefined && plugin.callback("onInit");
+          };
+
+          // Your other methods here...
+
+          plugin.callback = function(name) {
+            options[name] !== undefined && options[name].call(element);
+          };
+
+          plugin.init();
+        };
+
+        $.fn.navigation = function(options) {
+          return this.each(function() {
+            if (undefined === $(this).data("navigation")) {
+              var plugin = new $.navigation(this, options);
+              $(this).data("navigation", plugin);
+            }
+          });
+        };
+      })(jQuery, window, document);
+    });
+  </script>
+</body>
 </html>
