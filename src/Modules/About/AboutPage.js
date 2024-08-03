@@ -4,8 +4,14 @@ import ComingSoon from '../../Components/ComingSoon'
 const AboutPage = () => {
   return (
     <>
-      <h2>About us Page</h2>
-      <ComingSoon />
+      <section className='innerPage'>
+        <div className='container'>
+          <div className='innerPageSec'>
+            <h2>About us Page</h2>
+            <ComingSoon />
+          </div>
+        </div>
+      </section>
     </>
   )
 }
