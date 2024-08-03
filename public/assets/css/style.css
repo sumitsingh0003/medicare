@@ -485,19 +485,19 @@ section.main_Banner .row {
 
 
 section.innerPage {
-  background: #ecf4ff;
+  background: #f8fdff;
 }
 .innerPageSec {
   text-align: center;
   padding: 50px;
 }
 .innerPageSec>h2 {
-  color: #fff;
+  color: #364f66;
   font-size: 42px;
 }
 .comingSoon {
   padding: 50px;
-  background: #f8fdff;
+  background: #ecf4ff;
   border-radius: 20px;
   margin-top: 30px;
 }
